@@ -1,29 +1,24 @@
 import requests
 import csv
 
-# API URL
-url = 'https://api.hypixel.net/skyblock/bazaar'
 
-# Make the API request
-response = requests.get(url)
-data = response.json()
+def get_market_data():
+    # API URL
+    url = 'https://api.hypixel.net/skyblock/bazaar'
 
-# Extract data from the JSON response
-products = data['products']
+    # Make the API request
+    response = requests.get(url)
+    data = response.json()
 
-# Get the last updated timestamp
-last_updated = data['lastUpdated']
+    # Extract data from the JSON response
+    products = data['products']
 
-# Prepare CSV file
-csv_file = 'market.csv'
-fieldnames = ['product_id', 'buy_price', 'sell_price', 'last_updated', 'sell_volume', 'buy_volume', 'sell_orders', 'buy_orders']
-with open(csv_file, 'w', newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    # Get the last updated timestamp
+    last_updated = data['lastUpdated']
 
-    # Write header
-    writer.writeheader()
+    # Prepare data object
+    market_data = []
 
-    # Write data rows
     for product_id, product_data in products.items():
         buy_summary = product_data.get('buy_summary')
         sell_summary = product_data.get('sell_summary')
@@ -37,7 +32,7 @@ with open(csv_file, 'w', newline='') as file:
             sell_orders = quick_status.get('sellOrders')
             buy_orders = quick_status.get('buyOrders')
 
-            writer.writerow({
+            market_data.append({
                 'product_id': product_id,
                 'buy_price': buy_price,
                 'sell_price': sell_price,
@@ -48,4 +43,24 @@ with open(csv_file, 'w', newline='') as file:
                 'buy_orders': buy_orders
             })
 
-print(f"Data has been successfully saved to '{csv_file}'.")
+    return market_data
+
+
+if __name__ == '__main__':
+    # Get market data
+    data = get_market_data()
+
+    # Prepare CSV file
+    csv_file = 'market.csv'
+    fieldnames = ['product_id', 'buy_price', 'sell_price', 'last_updated',
+                  'sell_volume', 'buy_volume', 'sell_orders', 'buy_orders']
+    with open(csv_file, 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+        # Write header
+        writer.writeheader()
+
+        # Write data rows
+        writer.writerows(data)
+
+    print(f"Data has been successfully saved to '{csv_file}'.")
