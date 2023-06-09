@@ -1,1 +1,31 @@
+name: Upload Data to BigQuery
+
+on:
+  schedule:
+    - cron: "0 */12 * * *" # Run every 12 hours
+    #- cron: "0 12 * * *"  # Run every day at noon EST
+
+jobs:
+  upload_data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade google-cloud-bigquery
+          pip install requests
+
+      - name: Set Google Cloud credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: |
+          python uploadData.py
 
