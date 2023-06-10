@@ -6,10 +6,21 @@ import os
 def upload_data_to_bigquery(api_data):
 
     # Set the path to the credentials file
-    credentials_path = 'credentials.json'
+    credentials_path = 'credentials.json'  # Assuming credentials.json is in the same directory as the script
+
+    # Check if the credentials file exists
+    if not os.path.exists(credentials_path):
+        raise FileNotFoundError(f"Credentials file '{credentials_path}' not found.")
+
+    # Load the credentials JSON
+    with open(credentials_path, 'r') as credentials_file:
+        try:
+            credentials_info = json.load(credentials_file)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON format in credentials file: {str(e)}")
 
     # Create a BigQuery client with explicit credentials
-    client = bigquery.Client.from_service_account_json(credentials_path)
+    client = bigquery.Client.from_service_account_info(credentials_info)
 
     # Define the dataset and table
     dataset_id = 'Items'
