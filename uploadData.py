@@ -1,6 +1,7 @@
 from google.cloud import bigquery
 import Extraction
 import os
+import json
 
 
 def upload_data_to_bigquery(api_data):
