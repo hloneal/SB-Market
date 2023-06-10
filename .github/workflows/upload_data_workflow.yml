@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.9'
 
       - name: Install dependencies
         run: |
@@ -27,14 +27,12 @@ jobs:
           pip install --upgrade google-cloud-bigquery
           pip install requests
 
-      - name: Set Google Cloud credentials
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        run: |
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > key.json
-          python uploadData.py
-      
-      - name: Clean up
-        run: |
-          rm -f key.json
+      - name: Create credentials file
+        run: echo "$GOOGLE_APPLICATION_CREDENTIALS" > credentials.json
+
+      - name: Upload data to BigQuery
+        run: python uploadData.py
+
+      - name: Cleanup
+        run: rm credentials.json
 
