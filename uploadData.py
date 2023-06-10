@@ -1,8 +1,10 @@
 from google.cloud import bigquery
 import Extraction
+import os
 
 
 def upload_data_to_bigquery(api_data):
+
     # Set the path to the credentials file
     credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
