@@ -6,7 +6,7 @@ import os
 def upload_data_to_bigquery(api_data):
 
     # Set the path to the credentials file
-    credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+    credentials_path = 'credentials.json'
 
     # Create a BigQuery client with explicit credentials
     client = bigquery.Client.from_service_account_json(credentials_path)
