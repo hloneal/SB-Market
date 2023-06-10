@@ -27,8 +27,12 @@ jobs:
           pip install --upgrade google-cloud-bigquery
           pip install requests
 
-      - name: Create credentials file
-        run: echo $GOOGLE_APPLICATION_CREDENTIALS > credentials.json
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "credentials.json"
+          json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
       - name: Upload data to BigQuery
         run: python uploadData.py
