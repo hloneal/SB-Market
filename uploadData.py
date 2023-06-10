@@ -4,7 +4,9 @@ import os
 import json
 
 
-def upload_data_to_bigquery(api_data):
+def upload_data_to_bigquery():
+
+    api_data = Extraction.get_market_data()
 
     # Set the path to the credentials file
     credentials_path = 'credentials.json'  # Assuming credentials.json is in the same directory as the script
@@ -37,5 +39,4 @@ def upload_data_to_bigquery(api_data):
 
 if __name__ == '__main__':
     # Call the function to upload the data
-    data = Extraction.get_market_data()
-    upload_data_to_bigquery(data)
+    upload_data_to_bigquery()
