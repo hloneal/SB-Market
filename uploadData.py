@@ -1,10 +1,15 @@
 from google.cloud import bigquery
 import Extraction
+import os
 
 
 def upload_data_to_bigquery(api_data):
-    # Create a BigQuery client
-    client = bigquery.Client()
+    
+    # Set the path to the credentials file
+    credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
+    # Create a BigQuery client with explicit credentials
+    client = bigquery.Client.from_service_account_json(credentials_path)
 
     # Define the dataset and table
     dataset_id = 'Items'
