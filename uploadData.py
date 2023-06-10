@@ -24,8 +24,8 @@ def upload_data_to_bigquery(api_data):
     client = bigquery.Client.from_service_account_info(credentials_info)
 
     # Define the dataset and table
-    dataset_id = 'sb-market-389217.Items'
-    table_id = 'sb-market-389217.Items.all'
+    dataset_id = 'Items'
+    table_id = 'all'
 
     # Retrieve the existing table schema
     table = client.get_table(f"{client.project}.{dataset_id}.{table_id}")
