@@ -28,7 +28,7 @@ jobs:
           pip install requests
 
       - name: Create credentials file
-        run: echo "$GOOGLE_APPLICATION_CREDENTIALS" > credentials.json
+        run: echo $GOOGLE_APPLICATION_CREDENTIALS > credentials.json
 
       - name: Upload data to BigQuery
         run: python uploadData.py
