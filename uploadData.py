@@ -5,8 +5,8 @@ import json
 
 
 def upload_data_to_bigquery():
-
-    api_data = Extraction.get_market_data()
+    # Generate csv of data to push
+    Extraction.data_csv()
 
     # Set the path to the credentials file
     credentials_path = 'credentials.json'  # Assuming credentials.json is in the same directory as the script
@@ -29,12 +29,25 @@ def upload_data_to_bigquery():
     dataset_id = 'Items'
     table_id = 'all'
 
-    # Retrieve the existing table schema
-    table = client.get_table(f"{client.project}.{dataset_id}.{table_id}")
-    schema = table.schema
+    # Define the file path to the CSV data
+    csv_file_path = 'market.csv'  # Assuming market.csv is in the same directory as the script
 
-    # Insert the new data into the table
-    client.insert_rows(table, api_data, selected_fields=schema)
+    # Define the BigQuery table reference
+    table_ref = f"{client.project}.{dataset_id}.{table_id}"
+
+    # Load the CSV data into a BigQuery table
+    job_config = bigquery.LoadJobConfig(
+        source_format=bigquery.SourceFormat.CSV,
+        skip_leading_rows=1,
+        autodetect=True,
+    )
+    with open(csv_file_path, "rb") as file:
+        job = client.load_table_from_file(file, table_ref, job_config=job_config)
+
+    # Wait for the job to complete
+    job.result()
+
+    print(f"Data from '{csv_file_path}' has been successfully uploaded to BigQuery table '{table_ref}'.")
 
 
 if __name__ == '__main__':

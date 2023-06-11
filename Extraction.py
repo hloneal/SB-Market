@@ -46,7 +46,7 @@ def get_market_data():
     return market_data
 
 
-if __name__ == '__main__':
+def data_csv():
     # Get market data
     data = get_market_data()
 
@@ -64,3 +64,7 @@ if __name__ == '__main__':
         writer.writerows(data)
 
     print(f"Data has been successfully saved to '{csv_file}'.")
+
+
+if __name__ == '__main__':
+    data_csv()
